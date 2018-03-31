@@ -3,7 +3,8 @@ import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
 import Login from './Login';
 import './App.css';
 
-const UserList = () => (<div>UserList</div>);
+const UserList = () => (<div>UserList Page</div>);
+const Home = () => (<div>Home Page</div>);
 
 class App extends Component {
   state = {
@@ -29,11 +30,13 @@ class App extends Component {
           <React.Fragment>
             <div>
               <ul>
+                <NavLink to="/">Home</NavLink>
                 <NavLink to="/users">Users</NavLink>
               </ul>
             </div>
             <div>
               <Switch>
+                <Route exact path="/" component={Home} />
                 <Route exact path="/users" component={UserList} />
               </Switch>
             </div>
