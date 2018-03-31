@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, NavLink, Redirect } from 'react-router-dom';
 import Login from './Login';
 import './App.css';
 
@@ -11,11 +11,11 @@ class App extends Component {
     isLoggedIn: true,
     username: 'guest'
   };
-  handleUsername = isLoggedIn => {
-    this.setState({ isLoggedIn });
-  };
-  handleLogin = username => {
+  handleUsername = username => {
     this.setState({ username });
+  };
+  handleLogin = isLoggedIn => {
+    this.setState({ isLoggedIn });
   };
   render() {
     return (
@@ -37,7 +37,13 @@ class App extends Component {
             <div>
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/users" component={UserList} />
+                <AuthRoute
+                  exact
+                  path="/users"
+                  redirect="/"
+                  component={UserList}
+                  user={this.state.isLoggedIn}
+                />
               </Switch>
             </div>
           </React.Fragment>
@@ -46,5 +52,20 @@ class App extends Component {
     );
   }
 }
+
+const AuthRoute = ({ user: auth, component: Component, redirect: path, ...rest }) => {
+  console.log('auth:', auth);
+  return (
+    <Route {...rest} render={ props => (
+      auth ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{ pathname: path }}
+        />
+      ))}
+    />
+  );
+};
 
 export default App;
