@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Wrapper } from './styled';
 
-class StateSetup extends React.Component {
+class Login extends React.Component {
   state = {
     isLoggedIn: this.props.isLoggedIn,
     username: this.props.username,
@@ -40,4 +40,4 @@ class StateSetup extends React.Component {
   }
 }
 
-export default StateSetup;
+export default Login;

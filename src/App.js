@@ -1,18 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import Login from './Login';
 import './App.css';
 
+const UserList = () => (<div>UserList</div>);
+
 class App extends Component {
+  state = {
+    isLoggedIn: true,
+    username: 'guest'
+  };
+  handleUsername = isLoggedIn => {
+    this.setState({ isLoggedIn });
+  };
+  handleLogin = username => {
+    this.setState({ username });
+  };
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Login
+          handleUsername={this.handleUsername}
+          handleLogin={this.handleLogin}
+          username={this.state.username}
+          isLoggedIn={this.state.isLoggedIn}
+        />
+        <BrowserRouter>
+          <React.Fragment>
+            <div>
+              <ul>
+                <NavLink to="/users">Users</NavLink>
+              </ul>
+            </div>
+            <div>
+              <Switch>
+                <Route exact path="/users" component={UserList} />
+              </Switch>
+            </div>
+          </React.Fragment>
+        </BrowserRouter>
       </div>
     );
   }
