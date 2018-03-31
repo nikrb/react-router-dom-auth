@@ -8,7 +8,7 @@ const Home = () => (<div>Home Page</div>);
 
 class App extends Component {
   state = {
-    isLoggedIn: true,
+    isLoggedIn: false,
     username: 'guest'
   };
   handleUsername = username => {
@@ -42,12 +42,15 @@ class App extends Component {
                   path="/users"
                   redirect="/"
                   component={UserList}
-                  user={this.state.isLoggedIn}
+                  isLoggedIn={this.state.isLoggedIn}
                 />
-              <Route
-                path="/users/:id"
-                render={props => <UserPage id={props.match.params.id} />}
-              />
+                <AuthRoute
+                  path="/users/:id"
+                  redirect="/"
+                  component={UserPage}
+                  isLoggedIn={this.state.isLoggedIn}
+                  render={props => <UserPage id={props.match.params.id} />}
+                />
               </Switch>
             </div>
           </React.Fragment>
@@ -57,19 +60,24 @@ class App extends Component {
   }
 }
 
-const AuthRoute = ({ user: auth, component: Component, redirect: path, ...rest }) => {
-  console.log('auth:', auth);
-  return (
-    <Route {...rest} render={ props => (
-      auth ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{ pathname: path }}
-        />
-      ))}
-    />
-  );
+const AuthRoute = ({ isLoggedIn, component: Component, redirect, render : renderer, ...rest }) => {
+  if (renderer && isLoggedIn) {
+    return (
+      <Route {...rest} render={renderer} />
+    );
+  } else {
+    return (
+      <Route {...rest} render={ props => (
+        isLoggedIn ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: redirect }}
+          />
+        ))}
+      />
+    );
+  }
 };
 
 export default App;
