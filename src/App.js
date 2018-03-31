@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, NavLink, Redirect } from 'react-router-dom';
 import Login from './Login';
+import { UserList, UserPage } from './User';
 import './App.css';
 
-const UserList = () => (<div>UserList Page</div>);
 const Home = () => (<div>Home Page</div>);
 
 class App extends Component {
@@ -44,6 +44,10 @@ class App extends Component {
                   component={UserList}
                   user={this.state.isLoggedIn}
                 />
+              <Route
+                path="/users/:id"
+                render={props => <UserPage id={props.match.params.id} />}
+              />
               </Switch>
             </div>
           </React.Fragment>
